@@ -5,6 +5,10 @@ import {
   getTxsFromAddress
  } from './queries.js';
 
+import {
+  rateAccount
+} from './buyerRating.js';
+
 /*
 IS IT SUS THO? 
 Check the probably genuinity of NFT buyers
@@ -20,30 +24,6 @@ Check the probably genuinity of NFT buyers
 API Docs: https://www.blockcypher.com/dev/ethereum/
 */
 
-async function analyzeAccount(accountAddress) {
-  // do stuff...
-  let totalReceived = buyer['total_received'];
-  let totalSent = buyer['total_sent'];
-  let balance = buyer['balance'];
-  let numberOfTxs = buyer['n_tx'];
-  let confirmedNumberOfTxs = buyer['final_n_tx'];
-
-  let txs = buyer['txrefs'];
-  let txBlockHeights = []
-  let txValues = []
-  let tradingAddresses = []
-
-  txs.forEach(async tx => {
-    txBlockHeights.push(tx['block_height']);
-    txValues.push(tx['value']);
-    let addresses = await getAddressesFromTxs(tx['tx_hash']);
-    tradingAddresses.push(addresses);
-  })
-
-  let accountAge = (getCurrentBlockHeight - Math.min(...txBlockHeights));
-  let numberOfTradingAccounts = length(new Set(tradingAddresses));
-}
-
 async function main() {  
   let nftCollectionTxs = await getTxsFromAddress('0x1EAEaAEfFf5526B796EB3eB116cAbCd2805f7ea2');
   let nftCollectionAddresses = await getAddressesFromTxs(nftCollectionTxs);
@@ -56,7 +36,7 @@ async function main() {
   })
 
   buyerAccounts.forEach(async buyer => {
-    await analyzeAccount(buyer);
+    await rateAccount(buyer);
   })
 }
 
