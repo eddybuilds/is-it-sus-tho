@@ -13,6 +13,8 @@ Check the probably genuinity of NFT buyers
   a. Age
   b. Funds I/O
   ....
+
+API Docs: https://www.blockcypher.com/dev/ethereum/
 */
 
 let memoizedApiCalls = new Map();
@@ -31,7 +33,6 @@ async function callBlockCypherApi(url) {
 
 async function getTxsFromAddress(address) {
   let response = await callBlockCypherApi('https://api.blockcypher.com/v1/eth/main/addrs/' + address);
-
   return response;
 }
 
@@ -53,13 +54,36 @@ async function getAddressesFromTxs(txs) {
 
 async function getAddressData(address) {
   let response = await callBlockCypherApi('https://api.blockcypher.com/v1/eth/main/addrs/' + address);
-
   return response;
 }
 
-async function analyseBuyer(buyer) {
-  // do stuff...
+async function getCurrentBlockHeight() {
+  let response = await callBlockCypherApi('https://api.blockcypher.com/v1/eth/main');
+  return response['height'];
+}
 
+async function analyzeBuyer(buyer) {
+  // do stuff...
+  let totalReceived = buyer['total_received'];
+  let totalSent = buyer['total_sent'];
+  let balance = buyer['balance'];
+  let numberOfTxs = buyer['n_tx'];
+  let confirmedNumberOfTxs = buyer['final_n_tx'];
+
+  let txs = buyer['txrefs'];
+  let txBlockHeights = []
+  let txValues = []
+  let tradingAddresses = []
+
+  txs.forEach(async tx => {
+    txBlockHeights.push(tx['block_height']);
+    txValues.push(tx['value']);
+    let addresses = await getAddressesFromTxs(tx['tx_hash']);
+    tradingAddresses.push(addresses);
+  })
+
+  let accountAge = (await getCurrentBlockHeight - Math.min(...txBlockHeights));
+  let numberOfTradingAccounts = length(new Set(tradingAddresses));
 }
 
 async function main() {  
@@ -74,7 +98,7 @@ async function main() {
   })
 
   buyers.forEach(async buyer => {
-    await analyseBuyer(buyer);
+    await analyzeBuyer(buyer);
   })
 }
 
