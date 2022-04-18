@@ -1,0 +1,24 @@
+{
+  "name": "is-it-sus-tho",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "main": "node ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eddybuilds/is-it-sus-tho.git"
+  },
+  "author": "eddybuilds",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eddybuilds/is-it-sus-tho/issues"
+  },
+  "homepage": "https://github.com/eddybuilds/is-it-sus-tho#readme",
+  "dependencies": {
+    "node-fetch": "^3.2.3"
+  }
+}
