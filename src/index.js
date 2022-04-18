@@ -29,6 +29,7 @@ async function main() {
   let nftCollectionAddresses = await getAddressesFromTxs(nftCollectionTxs);
 
   buyerAccounts = []
+  buyerRatings = 0
 
   nftCollectionAddresses.forEach(async address => {
     let response = await getAddressData(address);
@@ -36,8 +37,11 @@ async function main() {
   })
 
   buyerAccounts.forEach(async buyer => {
-    await rateAccount(buyer);
+    let buyerRating = await rateAccount(buyer);
+    buyerRatings += buyerRating;
   })
+
+  console.log("Project Rating: " + (buyerRatings / length(buyerAccounts)));
 }
 
 await main();
